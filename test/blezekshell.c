@@ -3,15 +3,15 @@
 /**
  * main - Entry point for the Blezek Shell
  *
- * Return: Always returns 0
+ * Return: 0
  */
 int main(void) {
-	char shell_input[135];
+	char shell_input[125];
 
-	for (;;)
+	while (1)
 	{
 		shell_prompt_display();
-		read_user_input(user_input, sizeof(user_input));
+		read_shell_input(shell_input, sizeof(shell_input));
 		execute_shell_input(shell_input);
 	}
 	return (0);

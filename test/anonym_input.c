@@ -10,9 +10,9 @@
  * into the buffer, the function also ensures proper error handling and
  * removal of newline.
  */
-void read_user_input(char *user_input, size_t buffer_size) 
+void read_shell_input(char *shell_input, size_t buffer_size) 
 {
-	if (fgets(user_input, buffer_size, stdin) == NULL)
+	if (fgets(shell_input, buffer_size, stdin) == NULL)
 	{
 		if (feof(stdin))
 		{
@@ -26,5 +26,5 @@ void read_user_input(char *user_input, size_t buffer_size)
 			exit(EXIT_FAILURE);
 		}
 	}
-	user_input[strcspn(user_input, "\n")] = '\0';
+	shell_input[strcspn(shell_input, "\n")] = '\0';
 }

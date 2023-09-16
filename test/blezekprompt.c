@@ -8,5 +8,5 @@
  *
  */
 void shell_prompt_display(void) {
-	blezek_print("blezek_shell$");
+	blezek_print("blezek_shell$ ");
 }

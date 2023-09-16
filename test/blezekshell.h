@@ -9,11 +9,9 @@
 #include <sys/wait.h>
 
 
-void read_user_input(char *user_input, size_t buffer_size);
+void read_shell_input(char *shell_input, size_t buffer_size);
 void shell_prompt_display(void);
-void blezek_print(const char *StdoutText);
-void execute_shell_input(const char *shell_input, char *const args[]);
-const char *shell_input = "/bin/ls";
-int main(void)
+void blezek_print(const char *stdouttext);
+void execute_shell_input(const char *shell_input);
 
 #endif
