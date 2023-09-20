@@ -10,42 +10,92 @@
  * Return: 0 on success
  */
 
-int main(int argc, char **argv, char **env)
+int main(int argc __attribute__((unused)), char **argv, char **env)
 {
-	char *s, **arr;
-	int status, exit = 0, check_arg = 0;
+	if (isatty(STDIN_FILENO))
+		interactive_mode(argv, env);
+	else
+		non_interactive_mode(argv, env);
+
+	return (0);
+}
+
+/**
+ * non_interactive_mode - Handle shell commands in non_interactive mode
+ * @argv: points to an array of string arguments
+ * @env: points to a pointer that points a string of environment variables
+ */
+
+void non_interactive_mode(char **argv, char **env)
+{
+	char *line = NULL, **arr, **ar;
+	int status;
 	size_t size;
 	pid_t child_pid;
 
-	if (argc > 1)
-		check_arg = 1;
-
-	while (!exit)
+	while (getline(&line, &size, stdin) != -1)
 	{
-		if (check_arg)
+		arr = line_to_av(line, " \n");
+		ar = path_handler(arr);
+
+		if (ar != NULL)
 		{
-			arr = argv;
-			arr++;
+			new_process(&child_pid);
+			if (child_pid == 0)
+				exec_cmd(ar, env);
+			else
+				wait(&status);
 		}
 		else
 		{
-			printf("#cisfun$ ");
-			getline(&s, &size, stdin);
-			arr = line_to_av(s, " \n");
+			perror(argv[0]);
 		}
-
-		new_process(&child_pid);
-		if (child_pid == 0)
-			exec_cmd(arr, env);
-		else
-			wait(&status);
-
-		if (!check_arg)
-			free(arr);
-		else
-			check_arg = 0;
+		if (ar)
+			_free(ar[0]);
+		_free(arr);
 	}
-	return (0);
+	_free(line);
+}
+
+/**
+ * interactive_mode - Handle shell commands in interactive mode
+ * @argv: points to an array of string arguments
+ * @env: points to a pointer that points a string of environment variables
+ */
+
+void interactive_mode(char **argv, char **env)
+{
+	char *line, **arr, **ar;
+	int status;
+	size_t size;
+	pid_t child_pid;
+
+	while (1)
+	{
+		print_prompt();
+		getline(&line, &size, stdin);
+		arr = line_to_av(line, " \n");
+		if (strcmp(arr[0], "exit") == 0)
+			break;
+		ar = path_handler(arr);
+
+		if (ar != NULL)
+		{
+			new_process(&child_pid);
+			if (child_pid == 0)
+				exec_cmd(ar, env);
+			else
+				wait(&status);
+		}
+		else
+		{
+			perror(argv[0]);
+		}
+		if (ar != NULL)
+			_free(ar[0]);
+		_free(arr);
+	}
+	_free(line);
 }
 
 /**
