@@ -1,5 +1,7 @@
 #include "blezekshell.h"
 
+extern char** environ;
+
 /**
  * confirm_command - confirms if path directories exist before execution
  * @cmd: Command to be confirmed
@@ -45,6 +47,24 @@ void execute_shell_input(const char *shell_input, const char *path_dirs[])
 	}
 
 	args[arg_count] = NULL;
+
+	if (arg_count > 0 && strcmp(args[0], "exit") == 0)
+	{
+		blezek_print("Exiting the shell...\n");
+		exit(EXIT_SUCCESS);
+	}
+
+	if (arg_count > 0 && strcmp(args[0], "env") == 0)
+	{
+		char **env = environ;
+		while (*env != NULL)
+		{
+			blezek_print(*env);
+			blezek_print("\n");
+			env++;
+		}
+		return;
+	}
 
 	if (arg_count > 0)
 	{
