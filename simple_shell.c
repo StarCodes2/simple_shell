@@ -65,7 +65,7 @@ void non_interactive_mode(char **argv, char **env)
 
 void interactive_mode(char **argv, char **env)
 {
-	char *line, **arr, **ar;
+	char *line = NULL, **arr = NULL, **ar = NULL;
 	int status, c_check, l_check;
 	size_t size;
 	pid_t child_pid;
@@ -80,14 +80,13 @@ void interactive_mode(char **argv, char **env)
 		if (arr == NULL)
 			continue;
 
-		c_check = cmd_check(arr[0]);
+		c_check = cmd_check(arr[0], arr);
 		if (c_check == 0)
 			continue;
 		else if (c_check == 1)
 			break;
 
 		ar = path_handler(arr);
-
 		if (ar != NULL)
 		{
 			new_process(&child_pid);

@@ -31,7 +31,7 @@ char **path_handler(char **arr);
 void _free(void *);
 void interactive_mode(char **argv, char **env);
 void non_interactive_mode(char **, char **);
-int cmd_check(char *cmd);
+int cmd_check(char *cmd, char **arr);
 char *path_cat(char *dest, char *path, char *file);
 
 /**

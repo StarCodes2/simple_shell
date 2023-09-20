@@ -46,7 +46,7 @@ char *_getenv(const char *name)
 
 char **path_handler(char **arr)
 {
-	char **path_list, *path_strings, *temp, *copy;
+	char **path_list, *path_strings, *temp = NULL, *copy = NULL;
 	int len, len2, index = 0;
 	struct stat st;
 
@@ -67,24 +67,24 @@ char **path_handler(char **arr)
 	if (stat(temp, &st) == 0)
 	{
 		arr[0] = temp;
-		_free(copy);
+		_free(copy), _free(path_list);
 		return (arr);
 	}
-	_free(temp);
 
 	while (path_list[index])
 	{
+		_free(temp);
 		len2 = _strlen(path_list[index]) + 1;
 		temp = malloc(sizeof(char) * (len + len2));
 		temp = path_cat(temp, path_list[index++], arr[0]);
 		if (stat(temp, &st) == 0)
 		{
 			arr[0] = temp;
-			_free(copy);
+			_free(copy), _free(path_list);
 			return (arr);
 		}
-		_free(temp);
 	}
+	_free(temp), _free(copy), _free(path_list);
 	return (NULL);
 }
 
