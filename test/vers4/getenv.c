@@ -64,7 +64,7 @@ char **path_handler(char **arr)
 	if (temp == NULL)
 	{
 		_free(copy);
-		-free(path_list);
+		_free(path_list);
 		return (NULL);
 	}
 	temp = _strcpy(temp, arr[0]);

@@ -47,22 +47,26 @@ char *_getenv(const char *name)
 char **path_handler(char **arr)
 {
 	char **path_list, *path_strings, *temp = NULL, *copy = NULL;
-	int len, len2, index = 0;
+	int len;
 	struct stat st;
 
 	path_strings = _getenv("PATH");
-	len = _strlen(path_strings);
+	if (path_strings != NULL)
+	{
+		len = _strlen(path_strings);
+		copy =  malloc(sizeof(char) * ++len);
+		if (copy == NULL)
+			return (NULL);
 
-	copy =  malloc(sizeof(char) * ++len);
-	if (copy == NULL)
-		return (NULL);
-	copy = _strcpy(copy, path_strings);
-	path_list = line_to_av(copy, ":");
+		copy = _strcpy(copy, path_strings);
+		path_list = line_to_av(copy, ":");
+	}
 
 	len = _strlen(arr[0]) + 1;
 	temp = malloc(sizeof(char) * len);
 	if (temp == NULL)
 		return (NULL);
+
 	temp = _strcpy(temp, arr[0]);
 	if (stat(temp, &st) == 0)
 	{
@@ -70,21 +74,53 @@ char **path_handler(char **arr)
 		_free(copy), _free(path_list);
 		return (arr);
 	}
+	_free(temp);
 
-	while (path_list[index])
+	if (path_strings != NULL)
+		return (search_path(path_list, arr, copy));
+
+	_free(copy), _free(path_list);
+	return (NULL);
+}
+
+/**
+ * search_path - searches for a command in all given directories
+ * @paths: holds an array of pointers to directory paths
+ * @argv: holds an array of pointers to a command and its arguments
+ * @path_copy: points to a copy of the path variable
+ *
+ * Return: a pointer to the updated argv on success or NULL on fail
+ */
+
+char **search_path(char **paths, char **argv, char *path_copy)
+{
+	int index = 0, len, len2;
+	char *temp;
+	struct stat st;
+
+	len = _strlen(argv[0]);
+
+	while (paths[index])
 	{
-		_free(temp);
-		len2 = _strlen(path_list[index]) + 1;
+		len2 = _strlen(paths[index]) + 2;
 		temp = malloc(sizeof(char) * (len + len2));
-		temp = path_cat(temp, path_list[index++], arr[0]);
+		if (temp == NULL)
+		{
+			_free(paths), _free(path_copy);
+			return (NULL);
+		}
+
+		temp = path_cat(temp, paths[index++], argv[0]);
 		if (stat(temp, &st) == 0)
 		{
-			arr[0] = temp;
-			_free(copy), _free(path_list);
-			return (arr);
+			argv[0] = temp;
+			_free(paths), _free(path_copy);
+			return (argv);
 		}
+		_free(temp);
 	}
-	_free(temp), _free(copy), _free(path_list);
+	_free(paths), _free(path_copy);
+
 	return (NULL);
 }
 
