@@ -75,7 +75,11 @@ void interactive_mode(char **argv, char **env)
 		print("($) ");
 		l_check = getline(&line, &size, stdin);
 		if (l_check == -1)
-			continue;
+		{
+			print("\n");
+			break;
+		}
+
 		arr = line_to_av(line, " \n");
 		if (arr == NULL)
 			continue;
