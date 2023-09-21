@@ -18,12 +18,13 @@ int cmd_check(char *cmd, char **arr)
 	if (_strcmp(cmd, "exit") == 0)
 	{
 		_free(arr);
-		check = 1;
+		exit(EXIT_SUCCESS);
 	}
 	else if (_strcmp(cmd, "env") == 0)
 	{
 		check = print_env();
 		_free(arr);
+		return (1);
 	}
 	else
 		check = 2;

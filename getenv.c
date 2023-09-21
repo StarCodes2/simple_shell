@@ -62,29 +62,41 @@ char **path_handler(char **arr)
 	len = _strlen(arr[0]) + 1;
 	temp = malloc(sizeof(char) * len);
 	if (temp == NULL)
+	{
+		_free(copy);
+		-free(path_list);
 		return (NULL);
+	}
 	temp = _strcpy(temp, arr[0]);
 	if (stat(temp, &st) == 0)
-	{
-		arr[0] = temp;
-		_free(copy), _free(path_list);
-		return (arr);
-	}
 
 	while (path_list[index])
 	{
 		_free(temp);
 		len2 = _strlen(path_list[index]) + 1;
 		temp = malloc(sizeof(char) * (len + len2));
+
+		if (temp == NULL)
+		{
+			_free(copy);
+			_free(path_list);
+			return (NULL);
+		}
+
 		temp = path_cat(temp, path_list[index++], arr[0]);
+
 		if (stat(temp, &st) == 0)
 		{
 			arr[0] = temp;
-			_free(copy), _free(path_list);
+			_free(copy);
+		       	_free(path_list);
 			return (arr);
 		}
 	}
-	_free(temp), _free(copy), _free(path_list);
+	print_err("Error", arr[0], "not found in PATH");
+	_free(temp);
+	_free(copy);
+	_free(path_list);
 	return (NULL);
 }
 
