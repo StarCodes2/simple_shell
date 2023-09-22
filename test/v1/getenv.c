@@ -46,41 +46,35 @@ char *_getenv(const char *name)
 
 char **path_handler(char **arr)
 {
-	char **path_list = NULL, *path_strings = NULL,
-		*temp = NULL, *copy = NULL;
+	char **path_list, *path_strings, *temp = NULL, *copy = NULL;
 	int len;
 	struct stat st;
-
-	path_strings = _getenv("PATH");
-	if (path_strings != NULL)
-	{
-		len = _strlen(path_strings);
-		if (len > 0)
-		{
-			copy =  malloc(sizeof(char) * ++len);
-			if (copy != NULL)
-			{
-				copy = _strcpy(copy, path_strings);
-				path_list = line_to_av(copy, ":");
-			}
-		}
-	}
 
 	len = _strlen(arr[0]) + 1;
 	temp = malloc(sizeof(char) * len);
 	if (temp == NULL)
 		return (NULL);
-
 	temp = _strcpy(temp, arr[0]);
 	if (stat(temp, &st) == 0)
 	{
 		arr[0] = temp;
-		_free(copy), _free(path_list);
 		return (arr);
 	}
 	_free(temp);
 
-	if (path_strings != NULL && path_list != NULL)
+	path_strings = _getenv("PATH");
+	if (path_strings != NULL)
+	{
+		len = _strlen(path_strings);
+		copy =  malloc(sizeof(char) * ++len);
+		if (copy == NULL)
+			return (NULL);
+
+		copy = _strcpy(copy, path_strings);
+		path_list = line_to_av(copy, ":");
+	}
+
+	if (path_strings != NULL)
 		return (search_path(path_list, arr, copy));
 
 	_free(copy), _free(path_list);

@@ -39,7 +39,7 @@ void non_interactive_mode(char **argv, char **env)
 		if (arr == NULL)
 			continue;
 
-		c_check = cmd_check(arr[0], arr);
+		c_check = cmd_check(arr);
 		if (c_check == 0)
 			continue;
 		else if (c_check == 1)
@@ -88,7 +88,7 @@ void interactive_mode(char **argv, char **env)
 		if (arr == NULL)
 			continue;
 
-		c_check = cmd_check(arr[0], arr);
+		c_check = cmd_check(arr);
 		if (c_check == 0)
 			continue;
 		else if (c_check == 1)

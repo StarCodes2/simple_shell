@@ -50,6 +50,18 @@ char **path_handler(char **arr)
 	int len;
 	struct stat st;
 
+	len = _strlen(arr[0]) + 1;
+	temp = malloc(sizeof(char) * len);
+	if (temp == NULL)
+		return (NULL);
+	temp = _strcpy(temp, arr[0]);
+	if (stat(temp, &st) == 0)
+	{
+		arr[0] = temp;
+		return (arr);
+	}
+	_free(temp);
+
 	path_strings = _getenv("PATH");
 	if (path_strings != NULL)
 	{
@@ -61,20 +73,6 @@ char **path_handler(char **arr)
 		copy = _strcpy(copy, path_strings);
 		path_list = line_to_av(copy, ":");
 	}
-
-	len = _strlen(arr[0]) + 1;
-	temp = malloc(sizeof(char) * len);
-	if (temp == NULL)
-		return (NULL);
-
-	temp = _strcpy(temp, arr[0]);
-	if (stat(temp, &st) == 0)
-	{
-		arr[0] = temp;
-		_free(copy), _free(path_list);
-		return (arr);
-	}
-	_free(temp);
 
 	if (path_strings != NULL)
 		return (search_path(path_list, arr, copy));

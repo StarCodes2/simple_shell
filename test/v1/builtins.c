@@ -3,7 +3,7 @@
 /**
  * cmd_check - checks if the commands should call a built in function and
  *		calls if it
- * @arr: array of pointers to strings of a cmmand and its variables
+ * @arr: array of strings allocated for a command and its arguments
  *
  * Return: 0 if a non-process ending command is passed
  *	1 if a process ending command is passed

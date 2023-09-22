@@ -43,7 +43,7 @@ void non_interactive_mode(char **argv, char **env)
 		if (c_check == 0)
 			continue;
 		else if (c_check == 1)
-			_free(line), exit(EXIT_SUCCESS);
+			break;
 
 		ar = path_handler(arr);
 		if (ar != NULL)
@@ -62,6 +62,7 @@ void non_interactive_mode(char **argv, char **env)
 			_free(ar[0]);
 		_free(arr);
 	}
+	_free(line);
 }
 
 /**
@@ -91,7 +92,7 @@ void interactive_mode(char **argv, char **env)
 		if (c_check == 0)
 			continue;
 		else if (c_check == 1)
-			_free(line), exit(EXIT_SUCCESS);
+			break;
 
 		ar = path_handler(arr);
 		if (ar != NULL)
@@ -110,6 +111,7 @@ void interactive_mode(char **argv, char **env)
 			_free(ar[0]);
 		_free(arr);
 	}
+	_free(line);
 }
 
 /**
@@ -122,8 +124,8 @@ void new_process(pid_t *pid)
 	*pid = fork();
 	if (*pid == -1)
 	{
-		perror("Error");
-		exit(0);
+		perror("Error:");
+		exit(1);
 	}
 }
 
@@ -138,5 +140,5 @@ void exec_cmd(char **arr, char **env, char *cmd)
 {
 	if (execve(arr[0], arr, env) == -1)
 		perror(cmd);
-	exit(0);
+	exit(EXIT_FAILURE);
 }
