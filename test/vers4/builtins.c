@@ -2,7 +2,7 @@
 
 /**
  * cmd_check - checks if the commands should call a built in function and
- *		calls if it
+ *		calls it if it's a built-in
  * @arr: array of strings allocated for a command and its arguments
  *
  * Return: 0 if a non-process ending command is passed
@@ -13,11 +13,10 @@
 int cmd_check(char **arr)
 {
 	int check;
-
 	if (_strcmp(arr[0], "exit") == 0)
 	{
 		_free(arr);
-		check = 1;
+		exit(EXIT_SUCCESS);;
 	}
 	else if (_strcmp(arr[0], "env") == 0)
 	{
