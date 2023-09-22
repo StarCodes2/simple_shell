@@ -3,23 +3,24 @@
 /**
  * cmd_check - checks if the commands should call a built in function and
  *		calls if it
- * @arr: array of pointers to strings of a cmmand and its variables
+ * @cmd: points to the command passed to the shell
+ * @arr: array of strings allocated for command
  *
  * Return: 0 if a non-process ending command is passed
  *	1 if a process ending command is passed
  *	2 if no such commands are passed
  */
 
-int cmd_check(char **arr)
+int cmd_check(char *cmd, char **arr)
 {
 	int check;
 
-	if (_strcmp(arr[0], "exit") == 0)
+	if (_strcmp(cmd, "exit") == 0)
 	{
 		_free(arr);
 		check = 1;
 	}
-	else if (_strcmp(arr[0], "env") == 0)
+	else if (_strcmp(cmd, "env") == 0)
 	{
 		check = print_env();
 		_free(arr);
