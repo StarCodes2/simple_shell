@@ -33,6 +33,7 @@ void interactive_mode(char **argv, char **env);
 void non_interactive_mode(char **, char **);
 int cmd_check(char *cmd, char **arr);
 char *path_cat(char *dest, char *path, char *file);
+char **search_path(char **paths, char **argv, char *path_copy);
 
 /**
  * struct path_list - Singly linked list for the directories in PATH

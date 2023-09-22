@@ -28,16 +28,24 @@ int main(int argc __attribute__((unused)), char **argv, char **env)
 
 void non_interactive_mode(char **argv, char **env)
 {
-	char *line = NULL, **arr, **ar;
-	int status;
+	char *line = NULL, **arr = NULL, **ar = NULL;
+	int status, c_check;
 	size_t size;
 	pid_t child_pid;
 
 	while (getline(&line, &size, stdin) != -1)
 	{
 		arr = line_to_av(line, " \n");
-		ar = path_handler(arr);
+		if (arr == NULL)
+			continue;
 
+		c_check = cmd_check(arr[0], arr);
+		if (c_check == 0)
+			continue;
+		else if (c_check == 1)
+			break;
+
+		ar = path_handler(arr);
 		if (ar != NULL)
 		{
 			new_process(&child_pid);
