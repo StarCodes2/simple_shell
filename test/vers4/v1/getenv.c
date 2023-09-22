@@ -39,15 +39,14 @@ char *_getenv(const char *name)
 /**
  * path_handler - checks if a command(file/directory) can be executed(exists)
  * @arr: points to an array of pointers to string arguments
- * @env: points to the environment variable
  *
  * Return: an array of pointers to the command and its arguments
  *	NULL on fail or command not found
  */
 
-char **path_handler(char **arr, char **env)
+char **path_handler(char **arr)
 {
-	char *path_strings, *temp = NULL, *copy = NULL;
+	char **path_list, *path_strings, *temp = NULL, *copy = NULL;
 	int len;
 	struct stat st;
 
@@ -56,7 +55,6 @@ char **path_handler(char **arr, char **env)
 	if (temp == NULL)
 		return (NULL);
 	temp = _strcpy(temp, arr[0]);
-
 	if (stat(temp, &st) == 0)
 	{
 		arr[0] = temp;
@@ -71,21 +69,15 @@ char **path_handler(char **arr, char **env)
 		copy =  malloc(sizeof(char) * ++len);
 		if (copy == NULL)
 			return (NULL);
+
 		copy = _strcpy(copy, path_strings);
-		char **path_list = line_to_av(copy, ":");
-		if (path_list != NULL)
-		{
-			char *cmd_path = search_path(path_list, arr[0]);
-			if (cmd_path != NULL)
-			{
-				arr[0] = cmd_path;
-				_free(path_list);
-				return (arr);
-			}
-			_free(path_list);
-		}
-		_free(copy);
+		path_list = line_to_av(copy, ":");
 	}
+
+	if (path_strings != NULL)
+		return (search_path(path_list, arr, copy));
+
+	_free(copy), _free(path_list);
 	return (NULL);
 }
 
